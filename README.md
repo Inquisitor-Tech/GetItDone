@@ -334,5 +334,3 @@ Set these in AWS Secrets Manager or Elastic Beanstalk environment:
 This project is proprietary. All rights reserved.
 
 ---
-
-**Happy coding! Remember to read [CODING_RULES.md](./CODING_RULES.md) before writing any code.**
