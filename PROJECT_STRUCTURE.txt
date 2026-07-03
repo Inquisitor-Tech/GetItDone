@@ -1,0 +1,203 @@
+GetItDone Monorepo Structure
+════════════════════════════════════════════════════════════════════════════════
+
+GetItDone/
+│
+├── 📄 .gitignore                              ← Ignore node_modules, .env, dist, build, etc.
+├── 📄 .env.example                            ← Root-level env template
+├── 📄 docker-compose.yml                      ← PostgreSQL + Redis for local dev
+├── 📄 package.json                            ← Root workspace, shared scripts
+├── 📄 README.md                               ← Project overview, setup, contributing
+├── 📄 CLAUDE.md                               ← AI-assistant context & conventions
+│
+├── 📁 client/                                 ← React + Tailwind frontend (Vite)
+│   ├── 📄 .env.example                        ← Frontend env template
+│   ├── 📄 .gitignore                          ← Client-specific ignores
+│   ├── 📄 package.json                        ← Client dependencies & scripts
+│   ├── 📄 Dockerfile                          ← Multi-stage build for S3 deployment
+│   ├── 📄 vite.config.js                      ← Vite + PWA plugin config
+│   ├── 📄 tailwind.config.js                  ← Tailwind CSS configuration
+│   ├── 📄 postcss.config.js                   ← PostCSS for Tailwind
+│   ├── 📄 index.html                          ← HTML entry point
+│   │
+│   ├── 📁 public/                             ← Static assets
+│   │   ├── 📄 manifest.json                   ← PWA manifest
+│   │   ├── 📄 favicon.ico
+│   │   ├── 📄 robots.txt
+│   │   └── 📁 icons/                          ← PWA app icons (192x192, 512x512)
+│   │       ├── 📄 icon-192x192.png
+│   │       └── 📄 icon-512x512.png
+│   │
+│   └── 📁 src/
+│       ├── 📄 main.jsx                        ← Vite entry point
+│       ├── 📄 index.css                       ← Tailwind directives
+│       ├── 📄 App.jsx                         ← Route definitions, layout wrapper
+│       │
+│       ├── 📁 api/                            ← HTTP client functions (fetch wrapper)
+│       │   ├── 📄 client.js                   ← Axios/fetch setup, auth headers, interceptors
+│       │   ├── 📄 auth.api.js                 ← login, register, refresh, logout
+│       │   ├── 📄 users.api.js                ← getProfile, updateProfile, getPublicProfile
+│       │   ├── 📄 tasks.api.js                ← CRUD tasks, markComplete, getByUser
+│       │   ├── 📄 habits.api.js               ← CRUD habits, logValue, getStats
+│       │   ├── 📄 logs.api.js                 ← getHabitLogs, deleteLog
+│       │   └── 📄 leaderboard.api.js          ← getLeaderboard, getUserRank
+│       │
+│       ├── 📁 components/
+│       │   ├── 📁 ui/                         ← Reusable, unstyled primitives
+│       │   │   ├── 📄 Button.jsx              ← Primary, secondary, danger variants
+│       │   │   ├── 📄 Input.jsx               ← Text, email, password, number inputs
+│       │   │   ├── 📄 Card.jsx                ← Container with rounded corners & shadow
+│       │   │   ├── 📄 Badge.jsx               ← Tag/label component
+│       │   │   ├── 📄 ProgressBar.jsx         ← Linear progress indicator
+│       │   │   ├── 📄 Modal.jsx               ← Dialog with overlay, close button
+│       │   │   ├── 📄 Spinner.jsx             ← Loading indicator
+│       │   │   └── 📄 Select.jsx              ← Dropdown select
+│       │   │
+│       │   └── 📁 layout/                     ← Page layout components
+│       │       ├── 📄 Navbar.jsx              ← Top nav with user menu, logout
+│       │       ├── 📄 BottomNav.jsx           ← Mobile bottom tab bar
+│       │       ├── 📄 Sidebar.jsx             ← Optional desktop sidebar
+│       │       ├── 📄 PageWrapper.jsx         ← Page container with nav/footer
+│       │       └── 📄 ProtectedRoute.jsx      ← Auth guard wrapper
+│       │
+│       ├── 📁 pages/                          ← One file per page (route)
+│       │   ├── 📄 Login.jsx                   ← Login form, redirect to dashboard
+│       │   ├── 📄 Register.jsx                ← Registration form, terms acceptance
+│       │   ├── 📄 Dashboard.jsx               ← Home page, stats overview, quick actions
+│       │   ├── 📄 Tasks.jsx                   ← Task list, create/edit/delete, filter
+│       │   ├── 📄 Habits.jsx                  ← Habit list, log values, view history
+│       │   ├── 📄 HabitDetail.jsx             ← Single habit view, detailed logs, analytics
+│       │   ├── 📄 Leaderboard.jsx             ← Community leaderboard, friend comparison
+│       │   ├── 📄 Profile.jsx                 ← User profile edit, account settings
+│       │   ├── 📄 PublicProfile.jsx           ← Public view of another user
+│       │   ├── 📄 Settings.jsx                ← App settings, notifications, privacy
+│       │   └── 📄 NotFound.jsx                ← 404 page
+│       │
+│       ├── 📁 hooks/                          ← Custom React hooks
+│       │   ├── 📄 useAuth.js                  ← Auth state, login, logout, refresh
+│       │   ├── 📄 useTasks.js                 ← Fetch, create, update, delete tasks
+│       │   ├── 📄 useHabits.js                ← Fetch, create, log, update habits
+│       │   ├── 📄 useLeaderboard.js           ← Fetch leaderboard data
+│       │   ├── 📄 useLocalStorage.js          ← Persist state to localStorage
+│       │   └── 📄 useApi.js                   ← Generic hook for API calls (loading, error, data)
+│       │
+│       ├── 📁 context/                        ← Global state with Context API
+│       │   ├── 📄 AuthContext.jsx             ← User auth state, token management
+│       │   └── 📄 NotificationContext.jsx     ← Toast/notification system
+│       │
+│       ├── 📁 utils/
+│       │   ├── 📄 constants.js                ← API_BASE_URL, pagination limits, enum values
+│       │   ├── 📄 formatDate.js               ← Format dates relative, absolute, ISO
+│       │   ├── 📄 streak.js                   ← Streak calculation helpers
+│       │   ├── 📄 validation.js               ← Form validation schemas (email, password, etc.)
+│       │   └── 📄 localStorage.js             ← Wrapper for localStorage with encryption
+│       │
+│       └── 📁 __tests__/                      ← Optional: mirror structure with .test.jsx files
+│           ├── 📁 components/
+│           ├── 📁 hooks/
+│           └── 📁 utils/
+│
+└── 📁 server/                                 ← Express backend, REST API
+    ├── 📄 .env.example                        ← Backend env template
+    ├── 📄 .gitignore                          ← Server-specific ignores
+    ├── 📄 package.json                        ← Server dependencies & scripts
+    ├── 📄 Dockerfile                          ← Multi-stage build for EB deployment
+    │
+    ├── 📁 src/
+    │   ├── 📄 server.js                       ← HTTP server entry point, port listener
+    │   ├── 📄 app.js                          ← Express app setup, middleware, routes
+    │   │
+    │   ├── 📁 config/                         ← Configuration loaders
+    │   │   ├── 📄 env.js                      ← Parse & validate env vars
+    │   │   └── 📄 db.js                       ← Prisma client singleton
+    │   │
+    │   ├── 📁 routes/                         ← Route definitions (thin layer)
+    │   │   ├── 📄 auth.routes.js              ← POST /auth/register, /auth/login, /auth/refresh, /auth/logout
+    │   │   ├── 📄 users.routes.js             ← GET /users/me, PUT /users/me, GET /users/:id (public)
+    │   │   ├── 📄 tasks.routes.js             ← CRUD /tasks, POST /tasks/:id/complete
+    │   │   ├── 📄 habits.routes.js            ← CRUD /habits, POST /habits/:id/log
+    │   │   ├── 📄 logs.routes.js              ← GET /logs/habit/:habitId, DELETE /logs/:id
+    │   │   └── 📄 leaderboard.routes.js       ← GET /leaderboard, GET /leaderboard/user/:userId
+    │   │
+    │   ├── 📁 controllers/                    ← Request handlers, validation orchestration
+    │   │   ├── 📄 auth.controller.js          ← register, login, refresh, logout handlers
+    │   │   ├── 📄 users.controller.js         ← getProfile, updateProfile, getPublicProfile
+    │   │   ├── 📄 tasks.controller.js         ← list, create, update, delete, complete
+    │   │   ├── 📄 habits.controller.js        ← list, create, update, delete, logValue
+    │   │   ├── 📄 logs.controller.js          ← getByHabit, delete
+    │   │   └── 📄 leaderboard.controller.js   ← getLeaderboard, getUserRank
+    │   │
+    │   ├── 📁 services/                       ← Business logic layer
+    │   │   ├── 📄 auth.service.js             ← Hash passwords, generate tokens, validate creds
+    │   │   ├── 📄 users.service.js            ← User CRUD, profile retrieval
+    │   │   ├── 📄 tasks.service.js            ← Task CRUD, recurring task generation
+    │   │   ├── 📄 habits.service.js           ← Habit CRUD, streak calculation on log
+    │   │   ├── 📄 logs.service.js             ← Log CRUD, trigger habit streak updates
+    │   │   └── 📄 leaderboard.service.js      ← Rank users by streak, compute leaderboard
+    │   │
+    │   ├── 📁 middleware/
+    │   │   ├── 📄 auth.middleware.js          ← JWT verification, token extraction
+    │   │   ├── 📄 error.middleware.js         ← Global error handler, status mapping
+    │   │   ├── 📄 validate.middleware.js      ← Zod/Joi schema validation wrapper
+    │   │   ├── 📄 cors.middleware.js          ← CORS configuration
+    │   │   └── 📄 logger.middleware.js        ← Request logging, morgan setup
+    │   │
+    │   ├── 📁 prisma/
+    │   │   ├── 📄 schema.prisma               ← Complete data model definitions
+    │   │   └── 📁 migrations/                 ← Auto-generated migration files
+    │   │       └── (empty initially, migrations created by prisma migrate dev)
+    │   │
+    │   ├── 📁 utils/
+    │   │   ├── 📄 jwt.js                      ← Generate, verify, refresh tokens
+    │   │   ├── 📄 streak.js                   ← Streak increment/reset logic
+    │   │   ├── 📄 response.js                 ← Standardized API response formatter
+    │   │   ├── 📄 hash.js                     ← Password hashing (bcrypt)
+    │   │   └── 📄 logger.js                   ← Winston or pino logger setup
+    │   │
+    │   └── 📁 constants/
+    │       ├── 📄 errors.js                   ← Error messages and codes
+    │       └── 📄 enums.js                    ← Priority, frequency, recurrence enums
+    │
+    ├── 📁 tests/                              ← Jest unit tests, mirrors src/ structure
+    │   ├── 📄 jest.config.js
+    │   ├── 📁 unit/
+    │   │   ├── 📁 services/
+    │   │   │   ├── 📄 auth.service.test.js
+    │   │   │   ├── 📄 habits.service.test.js
+    │   │   │   └── 📄 logs.service.test.js
+    │   │   └── 📁 utils/
+    │   │       ├── 📄 jwt.test.js
+    │   │       └── 📄 streak.test.js
+    │   │
+    │   └── 📁 integration/
+    │       ├── 📄 auth.integration.test.js    ← Test full auth flow
+    │       ├── 📄 habits.integration.test.js  ← Test habit CRUD + logging
+    │       └── 📄 leaderboard.integration.test.js
+    │
+    └── 📁 .env.local (in root, not committed)  ← Local dev overrides
+
+
+════════════════════════════════════════════════════════════════════════════════
+KEY NOTES:
+
+Backend:
+  • Route → Controller → Service layer ensures separation of concerns
+  • Prisma schema.prisma houses all data models; migrations/ auto-generated
+  • JWT tokens: access (short-lived, 15min), refresh (long-lived, 7d)
+  • Error middleware catches all thrown errors and returns standardized responses
+  • Middleware stack: CORS → logging → auth (conditional) → validation
+
+Frontend:
+  • Vite for fast HMR dev, optimized production builds
+  • PWA manifest.json enables installation on mobile
+  • Context API for auth state; hooks for data fetching
+  • Tailwind CSS for styling; custom ui/ components compose primitives
+  • Mobile-first responsive design via Tailwind breakpoints
+
+Root:
+  • docker-compose.yml spins up Postgres + (optional Redis)
+  • Root package.json has shared scripts: "dev" (start both), "test" (run all tests)
+  • .env.example + .env.example in client/ and server/ show required variables
+  • .gitignore excludes node_modules, .env, dist, build, coverage, .DS_Store, etc.
+
+════════════════════════════════════════════════════════════════════════════════
